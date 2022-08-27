@@ -44,15 +44,24 @@ class Service(Base):
     name_service = Column(String)
 
     users_id=Column(Integer,ForeignKey("users.id"))
-    user = relationship("User", back_populates="services")
-    disponibility= relationship("Disponibility",secondary=service_workers_table)
+    users = relationship("User", back_populates="services")
+    workers= relationship("workers",secondary=service_workers_table)
 
 class Worker(Base):
     __tablename__="workers"
 
     id = Column(Integer,primary_key=True,index=True)
-    name_service = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
 
-    users_id=Column(Integer,ForeignKey("users.id"))
-    user = relationship("User", back_populates="services")
-    disponibility= relationship("Disponibility",secondary=service_disponibility_table)
+    
+    disponibility= relationship("Disponibility",back_populates="Worker")
+
+class Disponibility(Base):
+    __tablename__="disponibility"
+
+    id = Column(Integer,primary_key=True,index=True)
+    date_disponible = Column(DateTime)
+    hour_disponible = Column(Integer)
+
+    workers=relationship("Worker",back_populates="disponibility")

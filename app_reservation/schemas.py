@@ -1,10 +1,19 @@
 #Python
 from datetime import datetime
+
 #SQLAlchemy
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String,DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.schema import Table
 #app_reservation
 from .database import Base
+
+association_table = Table(
+    "association",
+    Base.metadata,
+    Column("services_id", ForeignKey("services.id"),primary_key=True),
+    Column("disponibility_id", ForeignKey("disponibility.id"),primary_key=True),
+)
 
 class User(Base):
     __tablename__="users"
@@ -17,3 +26,15 @@ class User(Base):
 
     is_active=Column(Boolean,default=True)
     created_at=Column(DateTime,default=datetime.now())
+
+    service = relationship("Service", back_populates="user")
+
+class Service(Base):
+    __tablename__="services"
+
+    id = Column(Integer,primary_key=True,index=True)
+    name_service = Column(String)
+
+    users_id=Column(Integer,ForeignKey("users.id"))
+    user = relationship("User", back_populates="services")
+    disponibility= relationship("Disponibility",secondary=association_table)

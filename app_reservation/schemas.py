@@ -5,11 +5,8 @@ from typing import Optional
 from pydantic import BaseModel
 from pydantic import Field,EmailStr
 
-class User(BaseModel):
-    email:EmailStr=Field(
-        ...,
-        example="user@gmail.com"
-        )
+
+class Person(BaseModel):
     first_name:str=Field(
         ...,
         title="First Name",
@@ -23,6 +20,13 @@ class User(BaseModel):
         description="Last Name of the user",
         min_length=1,
         max_length=100)
+
+class User(Person):
+    email:EmailStr=Field(
+        ...,
+        example="user@gmail.com"
+        )
+    
 
     contact_number:str=Field(
         ...,
@@ -39,3 +43,5 @@ class Service(BaseModel):
         min_length=1,
         max_length=100)
 
+class Worker(Person):
+    pass

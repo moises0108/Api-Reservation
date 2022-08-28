@@ -73,8 +73,11 @@ class TwoModels(BaseModel):
     id_left:int=Field(...)
     id_right:int=Field(...)
 
-class UserService(BaseModel):
+class UserService(TwoModels):
     pass
 
-class ServiceWorker(BaseModel):
+class ServiceWorker(TwoModels):
+    pass
+
+class WorkerDisponibility(TwoModels):
     pass

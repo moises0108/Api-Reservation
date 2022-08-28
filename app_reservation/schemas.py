@@ -69,7 +69,10 @@ class Disponibility(BaseModel):
             raise ValueError("You cannot schedule a date that has already passed")
         return date_disponible
     
+class TwoModels(BaseModel):
+    id_left:int=Field(...)
+    id_right:int=Field(...)
+
 class UserService(BaseModel):
-    id_user:int=Field(...)
-    id_service:int=Field(...)
+    pass
 

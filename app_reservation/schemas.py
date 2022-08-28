@@ -23,10 +23,19 @@ class User(BaseModel):
         description="Last Name of the user",
         min_length=1,
         max_length=100)
-        
+
     contact_number:str=Field(
         ...,
         title="Phone Number",
         description="Phone number of the user",
         min_length=1,
         max_length=100)
+
+class Service(BaseModel):
+    service_name:str=Field(
+        ...,
+        title="Service Name",
+        description="Service Name",
+        min_length=1,
+        max_length=100)
+

@@ -76,3 +76,5 @@ class TwoModels(BaseModel):
 class UserService(BaseModel):
     pass
 
+class ServiceWorker(BaseModel):
+    pass

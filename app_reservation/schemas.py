@@ -3,7 +3,7 @@ from datetime import date
 from typing import Optional
 from xmlrpc.client import DateTime
 #Pydantic
-from pydantic import BaseModel
+from pydantic import BaseModel,validator
 from pydantic import Field,EmailStr
 
 
@@ -60,5 +60,11 @@ class Disponibility(BaseModel):
         ...,
         lt=10,
         title="hour disponible",
-        description="hour that you want to agend",
+        description="hour that you want to schedule",
         )
+    @validator('date_disponible')
+    def date_valid(cls,date_disponible:date):
+        today_date=date.today()
+        if date_disponible<today_date:
+            raise ValueError("You cannot schedule a date that has already passed")
+        return date_disponible

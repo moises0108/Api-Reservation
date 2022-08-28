@@ -68,3 +68,8 @@ class Disponibility(BaseModel):
         if date_disponible<today_date:
             raise ValueError("You cannot schedule a date that has already passed")
         return date_disponible
+    
+class UserService(BaseModel):
+    id_user:int=Field(...)
+    id_service:int=Field(...)
+

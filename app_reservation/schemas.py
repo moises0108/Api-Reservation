@@ -13,14 +13,17 @@ class Person(BaseModel):
         title="First Name",
         description="First Name of the user",
         min_length=1,
-        max_length=100)
+        max_length=100,
+        example="Moises")
 
     last_name:str=Field(
         ...,
         title="Last Name",
         description="Last Name of the user",
         min_length=1,
-        max_length=100)
+        max_length=100,
+        example="Patino"
+        )
 
 
 class User(Person):
@@ -35,8 +38,18 @@ class User(Person):
         title="Phone Number",
         description="Phone number of the user",
         min_length=1,
-        max_length=100)
+        max_length=100,
+        example="+584140436425"
+        )
 
+class UserRegister(User):
+    hash_password:str=Field(
+        ...,
+        title="Password",
+        description="Password of the user",
+        min_length=8,
+        max_length=16,
+        example="Moises123")
 
 class Service(BaseModel):
     service_name:str=Field(

@@ -22,17 +22,17 @@ class User(Base):
     is_active=Column(Boolean,default=True)
     created_at=Column(DateTime,default=datetime.now())
 
-    user_service = relationship("UserService", back_populates="users_services")
+    user_service = relationship("UserService", back_populates="users")
 
 class UserService(Base):
     __tablename__="users_services"
     id = Column(Integer,primary_key=True,index=True)
 
     users_id=Column(Integer,ForeignKey("users.id"))
-    users = relationship("User", back_populates="users_services")
+    users = relationship("User", back_populates="user_service")
 
     services_id=Column(Integer,ForeignKey("services.id"))
-    services = relationship("Service", back_populates="users_services")
+    services = relationship("Service", back_populates="user_service")
 
 
 class Service(Base):
@@ -41,18 +41,18 @@ class Service(Base):
     id = Column(Integer,primary_key=True,index=True)
     name_service = Column(String)
 
-    user_service = relationship("UserService", back_populates="users_services")
-    service_worker = relationship("ServiceWorker", back_populates="services_workers")
+    user_service = relationship("UserService", back_populates="services")
+    services_workers = relationship("ServiceWorker", back_populates="services")
 
 
 class ServiceWorker(Base):
     __tablename__="services_workers"
     id = Column(Integer,primary_key=True,index=True)
 
-    services_id=Column(Integer,ForeignKey("users.id"))
+    services_id=Column(Integer,ForeignKey("services.id"))
     services = relationship("Service", back_populates="services_workers")
 
-    services_id=Column(Integer,ForeignKey("workers.id"))
+    workers_id=Column(Integer,ForeignKey("workers.id"))
     workers = relationship("Worker", back_populates="services_workers")
 
 
@@ -64,18 +64,18 @@ class Worker(Base):
     last_name = Column(String)
 
     
-    service_worker = relationship("ServiceWorker", back_populates="services_workers")
-    worker_disponibility = relationship("WorkerDisponibility", back_populates="workers_disponibility")
+    services_workers = relationship("ServiceWorker", back_populates="workers")
+    workers_disponibility = relationship("WorkerDisponibility", back_populates="workers")
 
 
 class WorkerDisponibility(Base):
     __tablename__="workers_disponibility"
     id = Column(Integer,primary_key=True,index=True)
 
-    services_id=Column(Integer,ForeignKey("workers.id"))
-    services = relationship("Worker", back_populates="workers_disponibility")
+    workers_id=Column(Integer,ForeignKey("workers.id"))
+    workers = relationship("Worker", back_populates="workers_disponibility")
 
-    services_id=Column(Integer,ForeignKey("disponibility.id"))
+    disponibility_id=Column(Integer,ForeignKey("disponibility.id"))
     disponibility = relationship("Disponibility", back_populates="workers_disponibility")
 
 class Disponibility(Base):
@@ -85,4 +85,4 @@ class Disponibility(Base):
     date_disponible = Column(DateTime,unique=True)
     hour_disponible = Column(Integer,unique=True)
 
-    worker_disponibility = relationship("WorkerDisponibility", back_populates="workers_disponibility")
+    workers_disponibility = relationship("WorkerDisponibility", back_populates="disponibility")

@@ -5,7 +5,8 @@ from xmlrpc.client import DateTime
 #Pydantic
 from pydantic import BaseModel,validator
 from pydantic import Field,EmailStr
-
+#SqlModel
+from sqlmodel import SQLModel
 
 class Person(BaseModel):
     first_name:str=Field(
@@ -25,6 +26,9 @@ class Person(BaseModel):
         example="Patino"
         )
 
+    class Config:
+        orm_mode=True
+
 
 class User(Person):
     email:EmailStr=Field(
@@ -41,6 +45,12 @@ class User(Person):
         max_length=100,
         example="+584140436425"
         )
+    birth_date:date=Field(
+        ...,
+        title='Birth Date',
+        description='Birth Date',
+        example="2000-08-01",
+    )
 
 class UserRegister(User):
     hash_password:str=Field(
@@ -58,7 +68,8 @@ class Service(BaseModel):
         description="Service Name",
         min_length=1,
         max_length=100)
-
+    class Config:
+        orm_mode=True
 class Worker(Person):
     pass
 
@@ -81,10 +92,14 @@ class Disponibility(BaseModel):
         if date_disponible<today_date:
             raise ValueError("You cannot schedule a date that has already passed")
         return date_disponible
+    class Config:
+        orm_mode=True
     
 class TwoModels(BaseModel):
     id_left:int=Field(...)
     id_right:int=Field(...)
+    class Config:
+        orm_mode=True
 
 class UserService(TwoModels):
     pass
@@ -94,3 +109,35 @@ class ServiceWorker(TwoModels):
 
 class WorkerDisponibility(TwoModels):
     pass
+
+#SqlModel
+class UpdateUser(SQLModel):
+    first_name:Optional[str] = Field(
+        default=None,
+        min_length=1,
+        max_length=50,
+        example="Moises"
+        )
+    last_name:Optional[str]= Field(
+        default=None,
+        min_length=1,
+        max_length=50,
+        example="Patino"
+        )
+    email:Optional[EmailStr] = Field(
+        default=None,
+        example="moisespatinoh@gmail.com"
+    )
+    birth_date : Optional[date] = Field(default=None,example="2000-08-01")
+    hash_password:Optional[str] = Field(
+        default=None,
+        min_length=8,
+        max_length=16,
+        example="Moises123"
+        )
+    contact_number:Optional[str]= Field(
+        default=None,
+        min_length=1,
+        max_length=50,
+        example="+584140436425"
+        )

@@ -1,3 +1,6 @@
+#Python
+from typing import List
+#FastApi
 from fastapi import FastAPI
 from fastapi import status,Depends,HTTPException,Body,Path
 #SqlAlchemy
@@ -19,6 +22,11 @@ def get_db():
     finally:
         db.close()
 
+# Path Operation
+
+## Users
+
+### Register a User
 @app.post(
     path="/register",
     status_code=status.HTTP_201_CREATED,
@@ -42,3 +50,118 @@ def create_user(db:Session=Depends(get_db),user:schemas.UserRegister=Body(...)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="Email already exists")
 
     return crud.create_user(db,user)
+
+### Show a User
+@app.get(
+    path="/user/{user_id}",
+    status_code=status.HTTP_200_OK,
+    summary="Show a User",
+    tags=["Users"],
+    response_model=schemas.User
+)
+def show_user(
+    db:Session=Depends(get_db),
+    user_id:int=Path(
+        ...,
+        title="User id",
+        description="Id of the User you want",
+        example=1
+        ),
+    ):
+    """
+    Show User
+
+    this path operation Show a select user in the app
+
+    Parameters:
+    - Path Parameter
+        - user_id:int
+    
+    Returns a Json with the basic user information:
+    - first_name: str
+    - last_name: str
+    - email: EmailStr
+    - contact_number:str
+    - birth_date:date
+    """
+    user=crud.get_user_by_id(db,user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    return user
+
+###Show all users
+@app.get(
+    path='/users',
+    status_code=status.HTTP_200_OK,
+    summary='Show all users',
+    tags=["Users"],
+    response_model=List[schemas.User]
+)
+def show_all_users(
+    db:Session=Depends(get_db)
+    ):
+    return crud.get_users(db)
+###Delete a User
+@app.delete(
+    path="/users/{user_id}/delete",
+    status_code=status.HTTP_200_OK,
+    summary="Delete a User",
+    tags=["Users"]
+    )
+def delete_a_user(
+    user_id:int=Path(
+        ...,
+        gt=0,
+        title="user id",
+        description="id of the user you want delete",
+        example=2
+    ),
+    db:Session=Depends(get_db)
+):
+    """
+    Delete a User
+
+    this path operation delete a user in the app
+
+    Parameters:
+    - Request Path Parameter
+        - user_id
+    
+    Returns a Json with the message user delete succesfull if it work:
+    """
+    return crud.delete_user(db=db,user_id=user_id)
+###Update a User
+@app.put(
+    path="/users/{user_id}/update",
+    response_model=schemas.User,
+    status_code=status.HTTP_200_OK,
+    summary="Update a User",
+    tags=["Users"]
+    )
+def update_a_user(
+    db:Session=Depends(get_db),
+    user_id:int=Path(
+        ...,
+        gt=0,
+        title="user_id",
+        description="id of the user you want update"
+        ),
+    user:schemas.UserRegister=Body(...)
+    ):
+    """
+    Update a User
+
+    this path operation update a user in the app
+
+    Parameters:
+    - Request Path Parameter:
+        - user_id
+    Request Body Parameter:
+        -user:UpdateUser
+    Returns a Json with basic user information of the user updated:
+    - email:EmailStr
+    - first_name:str
+    - last_name:str
+    - birth_date:date
+    """
+    return crud.update_user(db,user_id,user)

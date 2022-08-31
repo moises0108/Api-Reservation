@@ -2,7 +2,7 @@
 from datetime import datetime
 
 #SQLAlchemy
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String,DateTime
+from sqlalchemy import Boolean, Column, ForeignKey, Integer,Date, String,DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Table
 #app_reservation
@@ -18,7 +18,7 @@ class User(Base):
     last_name=Column(String)
     contact_number=Column(String)
     hash_password=Column(String)
-
+    birth_date=Column(Date)
     is_active=Column(Boolean,default=True)
     created_at=Column(DateTime,default=datetime.now())
 

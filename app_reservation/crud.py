@@ -37,3 +37,14 @@ def delete_user(db:Session,user_id:int):
     db.query(models.User).filter(models.User.id==user_id).delete()
     db.commit()
     return {'msg':'deleted succesfully'}
+
+def create_service(db:Session,service:schemas.Service):
+    db_service=models.Service(**service.dict())
+    db.add(db_service)
+    db.commit()
+    db.refresh(db_service)
+    return{'msg':'Created Succesfully'}
+
+
+def get_service(db:Session,id_service:int):
+    return db.query(models.Service).get(id_service)

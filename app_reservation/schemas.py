@@ -62,7 +62,7 @@ class UserRegister(User):
         example="Moises123")
 
 class Service(BaseModel):
-    service_name:str=Field(
+    name_service:str=Field(
         ...,
         title="Service Name",
         description="Service Name",

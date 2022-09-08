@@ -165,3 +165,60 @@ def update_a_user(
     - birth_date:date
     """
     return crud.update_user(db,user_id,user)
+
+##Service
+
+###Create a Service
+@app.post(
+    path="/service/create",
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a Service",
+    tags=["Service"]
+)
+def create_a_service(
+    db:Session=Depends(get_db),
+    service:schemas.Service=Body(...)
+    ):
+    """
+    Create a Service
+
+    this path operation create a service in the app
+
+    Parameters:
+    - Request Body Parameter
+        - service:Service
+    
+    Returns a Json with a msg if the operation is succesfully:
+    """
+    return crud.create_service(db,service)
+
+
+###Show a Service
+@app.get(
+    path="/service/{id_service}",
+    status_code=status.HTTP_200_OK,
+    summary='Get a Service',
+    response_model=schemas.Service
+)
+def get_service(
+    db:Session=Depends(get_db),
+    id_service:int=Path(
+        ...,
+        title="Service id",
+        description="Id of the Service you want",
+        example=1,
+        )
+    ):
+    """
+    Show a Service
+
+    this path operation Show a select server in the app
+
+    Parameters:
+    - Path Parameter
+        - id_service:int
+    
+    Returns a Json with the basic service information:
+    - name_service: str
+    """
+    return crud.get_service(db,id_service)
